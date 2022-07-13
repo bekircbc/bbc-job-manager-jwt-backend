@@ -55,3 +55,41 @@
          res.sendStatus(500);
          }
         });
+
+# maintain login
+
+                onst verifyToken = (req, res, next) => {
+                const bearerHeader = req.headers["authorization"];
+         if (typeof bearerHeader !== "undefined") {
+           const bearer = bearerHeader.split(" ");
+    const bearerToken = bearer[1];
+    req.token = bearerToken;
+    next();
+         } else {
+    res.sendStatus(403);
+         }
+        };
+
+        const decodeJwt = (token) => {
+         let base64Url = token.split(".")[1];
+         let base64 = base64Url.replace("-", "+").replace("_", "/");
+         let decodedData = JSON.parse(
+            Buffer.from(base64, "base64").toString("binary")
+         );
+          return decodedData;
+        };
+
+        app.post("/maintain-login", verifyToken, (req, res) => {
+         jwt.verify(req.token, "secretkey", (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      const data = decodeJwt(req.token);
+      res.json({
+        user: data.user,
+      });
+    }
+          });
+        });
+
+- in postmann headers.. authorization ... value = Bearer + token ...
