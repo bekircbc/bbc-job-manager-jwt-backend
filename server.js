@@ -18,12 +18,7 @@ const MONGODB_URI =
   process.env.MONGODB_URI || "mongodb://localhost/bbc-job-manager";
 
 mongoose.connect(MONGODB_URI, (err) => {
-  if (err) {
-    console.log({
-      error: "Cannot connect to MongoDB database.",
-      err: `"${err}"`,
-    });
-  }
+  if (err) console.log(err);
 });
 
 const app = express();
