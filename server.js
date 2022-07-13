@@ -3,6 +3,7 @@ import { JobSource } from "./models/JobSource.js";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
+import jwt from "jsonwebtoken";
 
 const user = {
   id: 1,
@@ -23,6 +24,13 @@ mongoose.connect(MONGODB_URI, (err) => {
       err: `"${err}"`,
     });
   }
+});
+
+jwt.sign({ user }, "secretkey", { expiresIn: "20s" }, (err, token) => {
+  res.json({
+    user,
+    token,
+  });
 });
 
 const app = express();
