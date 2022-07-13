@@ -69,9 +69,9 @@ app.post("/maintain-login", verifyToken, (req, res) => {
   });
 });
 
-app.post("/login", async (req, res) => {
-  const username = await req.body.username;
-  const password = await req.body.password;
+app.post("/login", (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
   if (username === "hans" && password === "123") {
     jwt.sign({ user }, "secretkey", { expiresIn: "50s" }, (err, token) => {
       res.json({
