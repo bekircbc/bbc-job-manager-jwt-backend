@@ -3,7 +3,7 @@ import { JobSource } from "./models/JobSource.js";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
 
 const user = {
   id: 1,
@@ -26,33 +26,33 @@ mongoose.connect(MONGODB_URI, (err) => {
   }
 });
 
-jwt.sign({ user }, "secretkey", { expiresIn: "20s" }, (err, token) => {
-  res.json({
-    user,
-    token,
-  });
-});
+// jwt.sign({ user }, "secretkey", { expiresIn: "20s" }, (err, token) => {
+//   res.json({
+//     user,
+//     token,
+//   });
+// });
 
-const verifyToken = (req, res, next) => {
-  const bearerHeader = req.headers["authorization"];
-  if (typeof bearerHeader !== "undefined") {
-    const bearer = bearerHeader.split(" ");
-    const bearerToken = bearer[1];
-    req.token = bearerToken;
-    next();
-  } else {
-    res.sendStatus(403);
-  }
-};
+// const verifyToken = (req, res, next) => {
+//   const bearerHeader = req.headers["authorization"];
+//   if (typeof bearerHeader !== "undefined") {
+//     const bearer = bearerHeader.split(" ");
+//     const bearerToken = bearer[1];
+//     req.token = bearerToken;
+//     next();
+//   } else {
+//     res.sendStatus(403);
+//   }
+// };
 
-const decodeJwt = (token) => {
-  let base64Url = token.split(".")[1];
-  let base64 = base64Url.replace("-", "+").replace("_", "/");
-  let decodedData = JSON.parse(
-    Buffer.from(base64, "base64").toString("binary")
-  );
-  return decodedData;
-};
+// const decodeJwt = (token) => {
+//   let base64Url = token.split(".")[1];
+//   let base64 = base64Url.replace("-", "+").replace("_", "/");
+//   let decodedData = JSON.parse(
+//     Buffer.from(base64, "base64").toString("binary")
+//   );
+//   return decodedData;
+// };
 
 const app = express();
 app.use(cors());
@@ -80,18 +80,18 @@ app.post("/login", (req, res) => {
   }
 });
 
-app.post("/maintain-login", verifyToken, (req, res) => {
-  jwt.verify(req.token, "secretkey", (err, authData) => {
-    if (err) {
-      res.sendStatus(403);
-    } else {
-      const data = decodeJwt(req.token);
-      res.json({
-        user: data.user,
-      });
-    }
-  });
-});
+// app.post("/maintain-login", verifyToken, (req, res) => {
+//   jwt.verify(req.token, "secretkey", (err, authData) => {
+//     if (err) {
+//       res.sendStatus(403);
+//     } else {
+//       const data = decodeJwt(req.token);
+//       res.json({
+//         user: data.user,
+//       });
+//     }
+//   });
+// });
 
 app.listen(port, () => {
   console.log(`Listening on http://localhost:${port}`);
