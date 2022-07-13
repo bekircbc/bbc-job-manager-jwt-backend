@@ -78,7 +78,7 @@ app.post("/login", async (req, res) => {
   const username = await req.body.username;
   const password = await req.body.password;
   if (username === "hans" && password === "123") {
-    jwt.sign({ user }, "secretkey", { expiresIn: "20s" }, (err, token) => {
+    jwt.sign({ user }, "secretkey", { expiresIn: "50s" }, (err, token) => {
       res.json({
         user,
         token,
