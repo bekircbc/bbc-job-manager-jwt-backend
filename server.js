@@ -26,6 +26,11 @@ mongoose.connect(MONGODB_URI, (err) => {
   }
 });
 
+const app = express();
+app.use(cors());
+app.use(express.json());
+const port = process.env.PORT || 30445;
+
 const verifyToken = (req, res, next) => {
   const bearerHeader = req.headers["authorization"];
   if (typeof bearerHeader !== "undefined") {
@@ -47,18 +52,8 @@ const decodeJwt = (token) => {
   return decodedData;
 };
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-const port = process.env.PORT || 30445;
-
 app.get("/", (req, res) => {
   res.send("<h1>Job Manager API</h1>");
-});
-
-app.get("/job-sources", async (req, res) => {
-  const jobSources = await JobSource.find();
-  res.status(200).json({ message: "fetched data from local", jobSources });
 });
 
 app.post("/maintain-login", verifyToken, (req, res) => {
@@ -85,8 +80,13 @@ app.post("/login", async (req, res) => {
       });
     });
   } else {
-    res.sendStatus(500);
+    res.sendStatus(403);
   }
+});
+
+app.get("/job-sources", async (req, res) => {
+  const jobSources = await JobSource.find();
+  res.status(200).json(jobSources);
 });
 
 app.listen(port, () => {
