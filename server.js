@@ -3,13 +3,13 @@ import { JobSource } from "./models/JobSource.js";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
-// import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const user = {
   id: 1,
-  userName: "hans",
-  firstName: "Hans",
-  lastName: "Richter",
+  username: "hans",
+  firstname: "Hans",
+  lastname: "Richter",
 };
 
 dotenv.config();
@@ -25,13 +25,6 @@ mongoose.connect(MONGODB_URI, (err) => {
     });
   }
 });
-
-// jwt.sign({ user }, "secretkey", { expiresIn: "20s" }, (err, token) => {
-//   res.json({
-//     user,
-//     token,
-//   });
-// });
 
 // const verifyToken = (req, res, next) => {
 //   const bearerHeader = req.headers["authorization"];
@@ -68,12 +61,15 @@ app.get("/job-sources", async (req, res) => {
   res.status(200).json({ message: "fetched data from local", jobSources });
 });
 
-app.post("/login", (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+app.post("/login", async (req, res) => {
+  const username = await req.body.username;
+  const password = await req.body.password;
   if (username === "hans" && password === "123") {
-    res.json({
-      user,
+    jwt.sign({ user }, "secretkey", { expiresIn: "20s" }, (err, token) => {
+      res.json({
+        user,
+        token,
+      });
     });
   } else {
     res.sendStatus(500);
