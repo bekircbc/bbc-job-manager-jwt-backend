@@ -35,4 +35,23 @@
 
 # JWT Authentication
 
--
+        const user = {
+         id: 1,
+          userName: "hans",
+          firstName: "Hans",
+         lastName: "Richter",
+        };
+
+        app.use(express.json());
+
+        app.post("/login", (req, res) => {
+         const username = req.body.username;
+         const password = req.body.password;
+         if (username === "hans" && password === "123") {
+          res.json({
+             user,
+          });
+         } else {
+         res.sendStatus(500);
+         }
+        });
